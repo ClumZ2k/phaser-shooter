@@ -14,7 +14,13 @@ const server =
 
 const io = new Server(server, {
     cors: {
-        origin: "https://phaser-shooter.hirenmudaliar2.workers.dev/"
+        origin: [
+            "http://127.0.0.1:5500",
+            "http://localhost:5500",
+            "https://phaser-shooter.hirenmudaliar2.workers.dev"
+        ],
+
+        methods: ["GET", "POST"]
     }
 });
 
@@ -67,6 +73,7 @@ io.on("connection", (socket) => {
             for (const id in players) {
 
                 if (
+                    players[id] &&
                     players[id].inGame
                 ) {
 
