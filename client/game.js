@@ -654,13 +654,13 @@ playerCountText.setOrigin(0.5);
                     `${index + 1}.`;
 
                 if (index === 0)
-                    rankText = "🥇";
+                    rankText = "#1";
 
                 if (index === 1)
-                    rankText = "🥈";
+                    rankText = "#2";
 
                 if (index === 2)
-                    rankText = "🥉";
+                    rankText = "#3";
 
                 const entry =
                     scene.add.text(
