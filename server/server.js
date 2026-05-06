@@ -14,7 +14,7 @@ const server =
 
 const io = new Server(server, {
     cors: {
-        origin: "*"
+        origin: "https://phaser-shooter.hirenmudaliar2.workers.dev/"
     }
 });
 
@@ -30,12 +30,32 @@ const redis = new Redis({
 
 let players = {};
 
+// SEND PLAYER COUNT
+function sendPlayerCount() {
+
+    let count = 0;
+
+    for (const id in players) {
+
+        if (players[id].inGame) {
+
+            count++;
+        }
+    }
+
+    io.emit(
+        "playerCount",
+        count
+    );
+}
+
 io.on("connection", (socket) => {
 
     console.log(
         "CONNECTED:",
         socket.id
     );
+    sendPlayerCount();
 
     // REQUEST PLAYERS
     socket.on(
@@ -103,6 +123,7 @@ io.on("connection", (socket) => {
                 activePlayers
             );
 
+            
             // SEND NEW PLAYER TO OTHERS
             socket.broadcast.emit(
                 "newPlayer",
@@ -112,6 +133,7 @@ io.on("connection", (socket) => {
                         players[socket.id]
                 }
             );
+            sendPlayerCount();
         }
     );
 
@@ -451,6 +473,7 @@ io.on("connection", (socket) => {
                 "playerDisconnected",
                 socket.id
             );
+            sendPlayerCount();
         }
     );
 
@@ -472,6 +495,7 @@ io.on("connection", (socket) => {
                 "playerDisconnected",
                 socket.id
             );
+            sendPlayerCount();
         }
     );
 });

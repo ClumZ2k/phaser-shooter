@@ -1,4 +1,6 @@
-const socket = io("http://127.0.0.1:3000");
+const socket = io(
+    "https://phaser-shooter.onrender.com"
+);
 
 const config = {
     type: Phaser.AUTO,
@@ -21,6 +23,7 @@ const game = new Phaser.Game(config);
 
 let player;
 let otherPlayers;
+let playerCountText;
 
 let bullets;
 let enemyBullets;
@@ -64,6 +67,19 @@ function create() {
 }
 
 function setupSocketEvents(scene) {
+    // PLAYER COUNT
+    socket.on(
+        "playerCount",
+        (count) => {
+
+            if (playerCountText) {
+
+                playerCountText.setText(
+                    `Players Online: ${count}`
+                );
+            }
+        }
+    );
 
     socket.removeAllListeners();
 
@@ -494,6 +510,19 @@ function createMenu(scene) {
     );
 
     title.setOrigin(0.5);
+
+    playerCountText =
+        scene.add.text(
+            400,
+            135,
+            "Players Online: 0",
+            {
+                fontSize: "24px",
+                fill: "#ffffff"
+            }
+        );
+
+playerCountText.setOrigin(0.5);
 
     // LEADERBOARD TITLE
     const leaderboardTitle =
